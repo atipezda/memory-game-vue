@@ -1,26 +1,50 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Card v-for="(card, index) in cardList" :key="index" :color="card.color" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Card from "./components/Card";
+import { ref } from "vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Card,
+  },
+  setup() {
+    const cardList = ref([]);
+
+    const cardItems = [
+      "#6600FF",
+      "#990033",
+      "#FFFF00",
+      "#0E0E0E",
+      "#76FF03",
+      "#00FF00",
+      "#696969",
+      "#CF7E3C",
+    ];
+    cardItems.forEach((item) => {
+      cardList.value.push({
+        color: item,
+      });
+
+      cardList.value.push({
+        color: item,
+      });
+    });
+    cardList.value = cardList.value.map((card, index) => {
+      return {
+        ...card,
+        position: index,
+      };
+    });
+
+    return {
+      cardList,
+    };
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
