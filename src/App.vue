@@ -18,7 +18,7 @@
 <script>
 import _ from "lodash";
 import Card from "./components/Card";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export default {
   name: "App",
@@ -100,8 +100,30 @@ export default {
       }
     };
 
-  //restartGame(); tasowanie na początku
+    watch(
+      userSelection,
+      (currentValue) => {
+        if (currentValue.length === 2) {
+          const cardFirst = currentValue[0];
+          const cardSecond = currentValue[1];
+          if (cardFirst.faceColor === cardSecond.faceColor) {
+            setTimeout(() => {
+              cardList.value[cardFirst.position].matched = true;
+              cardList.value[cardSecond.position].matched = true;
+            }, 500);
+          } else {
+            setTimeout(() => {
+              cardList.value[cardFirst.position].visible = false;
+              cardList.value[cardSecond.position].visible = false;
+            }, 500);
+          }
 
+          userSelection.value.length = 0;
+        }
+      },
+      { deep: true }
+    );
+    //restartGame(); tasowanie na początku
 
     return {
       cardList,
