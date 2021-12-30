@@ -10,6 +10,7 @@
       :position="card.position"
        @selectCard="flipCard"
     />
+    asd
   </section>
   <h2>{{ MatchStatus }}</h2>
   <button class="ressButton">Reset Gry</button>
