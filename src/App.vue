@@ -8,15 +8,15 @@
       :visible="card.visible"
       :matched="card.matched"
       :position="card.position"
-       @selectCard="flipCard"
+      @selectCard="flipCard"
     />
-    asd
   </section>
   <h2>{{ MatchStatus }}</h2>
-  <button class="ressButton">Reset Gry</button>
+  <button @click="restartGame" class="ressButton">Reset Gry</button>
 </template>
 
 <script>
+import _ from "lodash";
 import Card from "./components/Card";
 import { computed, ref } from "vue";
 
@@ -43,6 +43,23 @@ export default {
       ).length;
       return remainingCards / 2;
     });
+
+    const shuffleCards = () => {
+      cardList.value = _.shuffle(cardList.value);
+    };
+
+    const restartGame = () => {
+      shuffleCards();
+
+      cardList.value = cardList.value.map((card, index) => {
+        return {
+          ...card,
+          position: index,
+          matched: false,
+          visible: false,
+        };
+      });
+    };
 
     const cardItems = [
       "#6600FF",
@@ -77,16 +94,20 @@ export default {
     const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
       if (userSelection.value[0]) {
-          userSelection.value[1] = payload;
+        userSelection.value[1] = payload;
       } else {
         userSelection.value[0] = payload;
       }
     };
 
+  //restartGame(); tasowanie na początku
+
+
     return {
       cardList,
       MatchStatus,
-      flipCard
+      flipCard,
+      restartGame,
     };
   },
 };
