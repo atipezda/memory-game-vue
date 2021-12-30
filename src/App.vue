@@ -129,7 +129,7 @@ export default {
       { deep: true }
     );
   
-    //restartGame(); tasowanie na początku
+    restartGame();
 
     return {
       cardList,
