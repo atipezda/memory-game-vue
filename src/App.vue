@@ -7,9 +7,11 @@
       :color="card.color"
       :visible="card.visible"
       :matched="card.matched"
+      :position="card.position"
+       @selectCard="flipCard"
     />
   </section>
-  <h2>{{ status }}</h2>
+  <h2>{{ MatchStatus }}</h2>
   <button class="ressButton">Reset Gry</button>
 </template>
 
@@ -24,8 +26,9 @@ export default {
   },
   setup() {
     const cardList = ref([]);
+    const userSelection = ref([]);
 
-    const status = computed(() => {
+    const MatchStatus = computed(() => {
       if (remainingPairs.value === 0) {
         return "Gracz Wygrywa";
       } else {
@@ -70,9 +73,19 @@ export default {
       };
     });
 
+    const flipCard = (payload) => {
+      cardList.value[payload.position].visible = true;
+      if (userSelection.value[0]) {
+          userSelection.value[1] = payload;
+      } else {
+        userSelection.value[0] = payload;
+      }
+    };
+
     return {
       cardList,
-      status,
+      MatchStatus,
+      flipCard
     };
   },
 };
