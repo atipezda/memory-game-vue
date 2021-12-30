@@ -1,14 +1,21 @@
 <template>
   <h1>MEMORY GAMME</h1>
   <section class="gameBoard">
-    <Card v-for="(card, index) in cardList" :key="index" :color="card.color" />
+    <Card
+      v-for="(card, index) in cardList"
+      :key="index"
+      :color="card.color"
+      :visible="card.visible"
+      :matched="card.matched"
+    />
   </section>
+  <h2>{{ status }}</h2>
   <button class="ressButton">Reset Gry</button>
 </template>
 
 <script>
 import Card from "./components/Card";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export default {
   name: "App",
@@ -17,6 +24,21 @@ export default {
   },
   setup() {
     const cardList = ref([]);
+
+    const status = computed(() => {
+      if (remainingPairs.value === 0) {
+        return "Gracz Wygrywa";
+      } else {
+        return `Pozostałe Pary: ${remainingPairs.value}`;
+      }
+    });
+
+    const remainingPairs = computed(() => {
+      const remainingCards = cardList.value.filter(
+        (card) => card.matched === false
+      ).length;
+      return remainingCards / 2;
+    });
 
     const cardItems = [
       "#6600FF",
@@ -31,10 +53,14 @@ export default {
     cardItems.forEach((item) => {
       cardList.value.push({
         color: item,
+        visible: false,
+        matched: false,
       });
 
       cardList.value.push({
         color: item,
+        visible: false,
+        matched: false,
       });
     });
     cardList.value = cardList.value.map((card, index) => {
@@ -46,20 +72,24 @@ export default {
 
     return {
       cardList,
+      status,
     };
   },
 };
 </script>
 
 <style>
-body{
+body {
   background-color: #1b1e20;
 }
-h1{
+h1,
+h2 {
   text-align: center;
   color: #fff;
 }
 #app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
   position: relative;
 }
 .gameBoard {
@@ -70,26 +100,21 @@ h1{
   grid-row-gap: 4vh;
   justify-content: center;
 }
-.ressButton{
-  position: relative;
-  left:50%;
-  margin-top: 7vh;
-  transform: translateX(-50%);
-  box-shadow:inset 0px 1px 3px 0px #91b8b3;
-	background:linear-gradient(to bottom, #e8e8e8 5%, #6c7c7c 100%);
-	background-color:#e8e8e8;
-	border-radius:5px;
-	border:1px solid #566963;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:22px;
-	font-weight:bold;
-	padding:11px 23px;
+.ressButton {
+  box-shadow: inset 0px 1px 3px 0px #91b8b3;
+  background: linear-gradient(to bottom, #e8e8e8 5%, #6c7c7c 100%);
+  background-color: #e8e8e8;
+  border-radius: 5px;
+  border: 1px solid #566963;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 11px 23px;
   width: 300px;
-	text-decoration:none;
-	text-shadow:0px -1px 0px #2b665e;
-
+  text-decoration: none;
+  text-shadow: 0px -1px 0px #2b665e;
 }
 </style>
