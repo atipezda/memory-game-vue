@@ -4,11 +4,11 @@
     <Card
       v-for="(card, index) in cardList"
       :key="index"
-      :color="card.color"
+      :value="card.value"
       :visible="card.visible"
       :matched="card.matched"
       :position="card.position"
-      @selectCard="flipCard"
+      @select-card="flipCard"
     />
   </section>
   <h2>{{ MatchStatus }}</h2>
@@ -62,24 +62,24 @@ export default {
     };
 
     const cardItems = [
-      "#6600FF",
+      "#66FFFF",
       "#990033",
       "#FFFF00",
       "#0E0E0E",
       "#76FF03",
-      "#00FF00",
+      "#1029A1",
       "#696969",
       "#CF7E3C",
     ];
     cardItems.forEach((item) => {
       cardList.value.push({
-        color: item,
+        value: item,
         visible: false,
         matched: false,
       });
 
       cardList.value.push({
-        color: item,
+        value: item,
         visible: false,
         matched: false,
       });
@@ -91,10 +91,15 @@ export default {
       };
     });
 
-    const flipCard = (payload) => {
+   
+  const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
       if (userSelection.value[0]) {
-        userSelection.value[1] = payload;
+        if (userSelection.value[0].position === payload.position) {
+          return;
+        } else {
+          userSelection.value[1] = payload;
+        }
       } else {
         userSelection.value[0] = payload;
       }
@@ -106,7 +111,7 @@ export default {
         if (currentValue.length === 2) {
           const cardFirst = currentValue[0];
           const cardSecond = currentValue[1];
-          if (cardFirst.faceColor === cardSecond.faceColor) {
+          if (cardFirst.faceValue === cardSecond.faceValue) {
             setTimeout(() => {
               cardList.value[cardFirst.position].matched = true;
               cardList.value[cardSecond.position].matched = true;
@@ -123,12 +128,15 @@ export default {
       },
       { deep: true }
     );
+  
     //restartGame(); tasowanie na początku
 
     return {
       cardList,
-      MatchStatus,
       flipCard,
+      userSelection,
+      MatchStatus,
+      shuffleCards,
       restartGame,
     };
   },

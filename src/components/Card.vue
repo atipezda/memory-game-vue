@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="flippedStyles" @click="selectCard">
-    <div :style="{ backgroundColor: color }" class="card-face is-front">
+    <div :style="{ backgroundColor: value }" class="card-face is-front">
       <div v-if="matched" class="matched"></div>
     </div>
     <div class="card-face is-back"></div>
@@ -12,7 +12,7 @@ import { computed } from "@vue/reactivity";
 
 export default {
   props: {
-    color: {
+     value: {
       type: String,
       required: true,
     },
@@ -36,9 +36,9 @@ export default {
       }
     });
     const selectCard = () => {
-      context.emit("selectCard", {
+      context.emit("select-card", {
         position: props.position,
-        faceClor: props.color,
+        faceValue: props.value,
       });
     };
     return {
@@ -57,9 +57,9 @@ export default {
   cursor: pointer;
   transition: 0.5s transform ease-in;
   transform-style: preserve-3d;
--webkit-box-shadow: 0px 0px 26px -7px rgba(255, 255, 255, 1);
--moz-box-shadow: 0px 0px 26px -7px rgba(255, 255, 255, 1);
-box-shadow: 0px 0px 5px 3px rgb(148, 148, 148);
+  -webkit-box-shadow: 0px 0px 26px -7px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 0px 0px 26px -7px rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 5px 3px rgb(148, 148, 148);
 }
 .card-face.is-front {
   height: 100%;
