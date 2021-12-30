@@ -1,7 +1,7 @@
 <template>
-  <div class="card">
+  <div :style="{ backgroundColor: color }" class="card">
     <div class="card-face is-front">
-      <div class="matched">{{color}}</div>
+      <div class="matched"></div>
     </div>
     <div class="card-face is-back"></div>
   </div>
@@ -13,9 +13,21 @@ export default {
     color: {
       type: String,
       required: true,
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style></style>
+<style>
+.card {
+  border: 1px solid #fff;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.card-face.is-front {
+  position: absolute;
+}
+.is-back {
+  height: 100%;
+}
+</style>
