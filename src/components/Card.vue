@@ -1,13 +1,15 @@
 <template>
-  <div class="card">
-    <div :style="{ backgroundColor: value }" class="card-face is-front">
-      <div v-if="matched" class="matched">siema</div>
+  <div class="card" :class="flippedStyles" @click="selectCard">
+    <div :style="{ backgroundColor: color }" class="card-face is-front">
+      <div v-if="matched" class="matched"></div>
     </div>
-    <div class="card-face is-back">LOLS</div>
+    <div class="card-face is-back"></div>
   </div>
 </template>
 
 <script>
+import { computed } from "@vue/reactivity";
+
 export default {
   props: {
     color: {
@@ -16,12 +18,33 @@ export default {
     },
     matched: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    position: {
+      type: Number,
+      required: true,
     },
     visible: {
       type: Boolean,
       default: false,
     },
+  },
+  setup(props, context) {
+    const flippedStyles = computed(() => {
+      if (props.visible) {
+        return "is-flipped";
+      }
+    });
+    const selectCard = () => {
+      context.emit("selectCard", {
+        position: props.position,
+        faceClor: props.color,
+      });
+    };
+    return {
+      selectCard,
+      flippedStyles,
+    };
   },
 };
 </script>
@@ -32,15 +55,21 @@ export default {
   border-radius: 10px;
   position: relative;
   cursor: pointer;
+  transition: 0.5s transform ease-in;
+  transform-style: preserve-3d;
 }
 .card-face.is-front {
-  position: absolute;
-  width: 100%;
   height: 100%;
+  width: 100%;
+  position: absolute;
+  border-radius: inherit;
+  transform: rotateY(180deg);
+}
+.card.is-flipped {
+  transform: rotateY(180deg);
 }
 .is-back {
   background-color: white;
-
   height: 100%;
 }
 .matched {
