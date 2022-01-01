@@ -1,5 +1,7 @@
 <template>
   <h1>MEMORY GAMME</h1>
+  <button @click="openFullScreen" class="fullScreenButton"></button>
+  click me
   <section class="gameBoard">
     <Card
       v-for="(card, index) in cardList"
@@ -24,6 +26,11 @@ export default {
   name: "App",
   components: {
     Card,
+  },
+  data() {
+    return {
+      fullScreen: false,
+    };
   },
   setup() {
     const cardList = ref([]);
@@ -60,6 +67,16 @@ export default {
         };
       });
     };
+    const openFullScreen = () => {
+      if (document.fullscreenElement) {
+        document
+          .exitFullscreen()
+          .then(() => console.log("Document Exited from Full screen mode"))
+          .catch((err) => console.error(err));
+      } else {
+        document.documentElement.requestFullscreen();
+      }
+    };
 
     const cardItems = [
       "#66FFFF",
@@ -91,8 +108,7 @@ export default {
       };
     });
 
-   
-  const flipCard = (payload) => {
+    const flipCard = (payload) => {
       cardList.value[payload.position].visible = true;
       if (userSelection.value[0]) {
         if (userSelection.value[0].position === payload.position) {
@@ -128,7 +144,7 @@ export default {
       },
       { deep: true }
     );
-  
+
     restartGame();
 
     return {
@@ -136,6 +152,7 @@ export default {
       flipCard,
       userSelection,
       MatchStatus,
+      openFullScreen,
       shuffleCards,
       restartGame,
     };
@@ -144,13 +161,16 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css?family=Varela+Round");
+
 body {
+  font-family: "Varela Round", sans-serif;
   background-color: #1b1e20;
+  color: #fff;
 }
 h1,
 h2 {
   text-align: center;
-  color: #fff;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -159,8 +179,8 @@ h2 {
 }
 .gameBoard {
   display: grid;
-  grid-template-columns: repeat(4, 150px);
-  grid-template-rows: repeat(4, 150px);
+  grid-template-columns: repeat(4, 120px);
+  grid-template-rows: repeat(4, 120px);
   grid-column-gap: 5vw;
   grid-row-gap: 4vh;
   justify-content: center;
@@ -181,5 +201,36 @@ h2 {
   width: 300px;
   text-decoration: none;
   text-shadow: 0px -1px 0px #2b665e;
+}
+.fullScreenButton {
+  margin: 20px;
+  color: #1ccece;
+  background-color: #1b1e20;
+  font-size: 3rem;
+  vertical-align: middle;
+  box-sizing: border-box;
+  display: inline-block;
+  border: 0.1em solid black;
+  width: 1em;
+  height: 1em;
+  position: relative;
+}
+.fullScreenButton:before,
+.fullScreenButton:after {
+  content: "";
+  background: #1b1e20;
+  position: absolute;
+}
+.fullScreenButton:before {
+  width: 0.333em;
+  height: 1em;
+  left: 0.233em;
+  top: -0.1em;
+}
+.fullScreenButton:after {
+  width: 1em;
+  height: 0.333em;
+  top: 0.233em;
+  left: -0.1em;
 }
 </style>
